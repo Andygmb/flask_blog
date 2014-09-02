@@ -1,0 +1,90 @@
+{% extends "base_comments.html" %}
+
+{% block titlebox %}
+
+<div id="title-box" class="blue box ">
+	<h1><a href="/">andygmb</a></h1>
+</div>
+{% endblock %}
+
+
+{% block blogpost %}
+<div id="blogposts">
+	<div class="green box main blog-post">
+
+		<div class="title">
+		<h1>{{blogpost.title}}</h1>
+
+		</div>
+
+		<div class="date">
+		{{blogpost.date}}
+		</div>
+		<div class="clear"></div>
+
+		<div class="body">
+		{{blogpost.content}}
+		</div>
+
+		<div class="footer">
+
+
+
+		</div>
+	</div>
+	{% endblock %}
+
+	{% block commentform %}
+	<div class="yellow box main" id="signup-form">
+		<h1>Post a comment</h1>
+		<form> 
+
+			<h2>Name</h2>
+			<input type="text">
+
+			<h2>Comment</h2>
+			<textarea></textarea>
+
+			<input name="comment" type="submit" value="Submit">
+			<div class="clear"></div>
+		</form>
+	</div>
+	{% endblock %}
+
+	{% block commentarea %}
+	<div class="orange box main commentarea">
+		{% for comment in blogpost["comments"] %}
+		<div class="comment">
+		<h3>{{ comment.name }}</h3>
+		<h4>{{ comment.date }}</h4>
+		<p>{{ comment.comment }}</p>
+		</div>
+		{% endfor %}
+
+	</div>
+</div>
+{% endblock %}
+
+
+{% block sidebar %}
+
+	<div id="sidebar">
+		<div class="blue box sidebar-post">
+			<h3>Links</h3>
+			<ul>
+				<li><a href="#">github</a></li>
+				<li><a href="#">reddit</a></li>
+			</ul>
+			<p>
+		</div>
+		<div class="orange box sidebar-post">
+			<h3>Projects</h3>
+			<ul>
+				<li><a href="#">Conways game of life</a></li>
+				<li><a href="#">Ray tracer</a></li>
+			</ul>
+			<p>
+		</div>
+	</div>
+<div class="clear"></div>	
+{% endblock %}

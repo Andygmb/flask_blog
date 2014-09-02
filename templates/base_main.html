@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>{% block title %}{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='reset.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+<div id="wrapper">
+	<div id="main-wrapper">
+	{% block titlebox %}
+	{% endblock %}
+
+	{% block blogposts %}
+	{% endblock %}
+
+	{% block sidebar %}
+	{% endblock %}
+	</div>
+</div>
+
+</body>
+</html>
