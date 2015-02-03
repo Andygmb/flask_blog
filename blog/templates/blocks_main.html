@@ -1,0 +1,77 @@
+{% extends "base_main.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block navbar %}
+<div class="navbar shadow">
+	<div class="navbar-title left"><h1><a href="/" data="#blogposts">andygmb</a></h1></div>
+	<ul class="navbar-ul right">
+		<li><a href="/projects" data="#projects">projects</a></li>
+		<li><a href="/blog" data="#blogposts">blog</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+{% endblock %}
+
+{% block blogposts %}
+
+<div id="blogposts" class="inner_section show">
+	{% if admin %}
+	<div id="create" class="shadow"><a href="/create_blogpost">Create blogpost</a></div>
+	{% endif %}
+		{% for blog in blogposts %}
+		<div class="blogpost shadow">
+			<div class="date">{{blog.date}}</div>
+			<div class="title"><h1>{{blog.title}}</h1></div>
+			<div class="blog_content">{{blog.blog_content[0:500]}}...</div>
+			<a href="{{blog.url_title}}/" class="readmore">Read more</a>
+			{% if admin %}
+			<div class="edit"><a href="{{blog.url_title}}/edit">edit post</a><span> | </span><a href="{{blog.url_title}}/delete">delete post</a></div>
+			{% endif %}
+		</div>
+		{% endfor %}
+	</div>
+{% endblock %}
+
+{% block projects %}
+<div id="projects" class="inner_section hidden">
+	{% for project in projects %}
+			<a href="{{ project.url }}" class="project shadow github">
+				<div class="title"><h1>{{ project.title }}</h1></div>
+				<img class="preview" src="../static/images/{{ project.preview }}.png">
+				<div class="tldr"><p>{{ project.tldr }}</p></div>
+			</a>
+	{% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script>
+$(".navbar .navbar-ul a").on("click", function(e){
+	e.preventDefault();
+	clicked = $($(this).attr("data"))
+	shown = $(".show")
+	if (clicked.hasClass("hidden") & !clicked.is(':animated')) {
+		shown.animate({"right":"-110%"},{
+			queue:false, 
+			duration:300,
+			complete:function(){
+				shown.toggle()
+				shown.removeClass("show")
+				shown.addClass("hidden")
+			}});
+		clicked.toggle().animate({"right":"0%"}, {
+			queue:false,
+			duration:300,
+			complete:function(){
+				clicked.removeClass("hidden")
+				clicked.addClass("show")
+			}});
+	}
+
+});
+</script>
+
+{% endblock %}

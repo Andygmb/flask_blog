@@ -1,0 +1,75 @@
+{% extends "base_html.html" %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar shadow">
+	<div class="navbar-title left"><h1><a href="/" data="#blogposts">andygmb</a></h1></div>
+	<div class="clear"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="mainwrap">
+
+	<div class="outer_section">
+		<div id="login" class="inner_section show">
+			<div id="loginform" class="shadow">
+				<form method="POST" action="/login">
+					<label>Username</label>
+					{{ form.username }}
+					<label>Password</label>
+					{{ form.password }}
+					<div class="login_error"></div>
+					<button input type="submit" value="Login">Login</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script>
+$("button").on("click", function(e){
+	username = document.getElementById("username").value;
+	password = document.getElementById("password").value;
+	console.log(username, password)
+	$.ajax({
+		type: "POST",
+		url:"/login",
+		data: {"username":username,"password":password},
+		success: function(response) {
+			if (response === "false"){
+				$(".login_error").text("Incorrect login details")
+			} else {
+				$(".outer_section").append(response)
+				login = $("#login")
+				textarea = $("#textarea")
+				login.animate({"right":"-110%"},{
+					queue:false, 
+					duration:300,
+					complete:function(){
+						login.toggle()
+						login.removeClass("show")
+						login.addClass("hidden")
+					}});
+				textarea.toggle().animate({"right":"0%"}, {
+					queue:false,
+					duration:300,
+					complete:function(){
+						textarea.removeClass("hidden")
+						textarea.addClass("show")
+					}});
+
+					}
+		}
+	})
+	return false;
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+				<div id="projects" class="inner_section hidden">
+					<a href="https://github.com/Andygmb/twitchy_the_bot" class="project shadow github">
+						<div class="title"><h1>twitchy-the-bot</h1></div>
+						<img class="preview" src="../static/images/twitchy.png">
+						<div class="tldr"><p>a reddit bot using the twitch.tv API to display livestreams on a subreddit </p></div>
+					</a>
+					<a href="https://github.com/Andygmb/age-of-empires-minimap-resizer" class="project shadow github">
+						<div class="title"><h1>aoe-minimap-resizer</h1></div>
+						<img class="preview" src="../static/images/aoe.png">
+						<div class="tldr"><p>a pygame display using the win32 api that takes the aoe minimap and resizes it onto a second monitor</p></div>
+					</a>
+					<a href="https://github.com/Andygmb/gol.js" class="project shadow github">
+						<div class="title"><h1>game-of-life</h1></div>
+						<img class="preview" src="../static/images/gol.gif">
+						<div class="tldr"><p>conway's game of life in javascript using a HTML5 canvas </p></div>
+					</a>
+				</div>
+
+
+				
+	def __init__(self, title, preview, tldr, url):
