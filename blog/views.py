@@ -9,7 +9,7 @@ import html2text
 
 
 @app.route('/')
-@cache.cached(timeout=1)
+@cache.cached(timeout=600)
 def hello_world():
 	title = "andygmb"
 	blogposts = Blogpost.query.filter_by(deleted=False).order_by(Blogpost.id.desc()).limit(5).all()
@@ -168,6 +168,7 @@ def login():
 
 
 @app.route('/projects')
+@cache.cached(timeout=600)
 def projects():
 	title = "andygmb | projects"
 	projects = Project.query.order_by(Project.id.desc()).all()
@@ -176,6 +177,7 @@ def projects():
 	return render_template("blocks_projects.html", ajax=False, projects=projects, title=title)
 
 @app.route('/blog')
+@cache.cached(timeout=600)
 def blogs():
 	title = "andygmb | blog"
 	blogposts = Blogpost.query.order_by(Blogpost.id.desc()).limit(5).all()
