@@ -17,16 +17,15 @@
 <div id="blogposts" class="inner_section show">
 	{% if admin %}
 	<div class="create shadow"><a href="/create_blogpost">Create blogpost</a></div>
-	<div class="deleted_posts shadow"><a href="/deleted_posts">View deleted posts</a></div>
 	<div class="create shadow"><a href="/create_project">Create project</a></div>
+	<div class="deleted_posts shadow"><a href="/deleted_posts">View deleted posts</a></div>
 	<div class="deleted_projects shadow"><a href="/deleted_projects">View deleted projects</a></div>
 	{% endif %}
 		{% for blog in blogposts %}
 		<div class="blogpost shadow">
-		{{blog.id}}
 			<div class="date">by {{blog.name}} on {{blog.date}}</div>
 			<div class="title"><h1>{{blog.title}}</h1></div>
-			<div class="blog_content">{{blog.blog_content[0:500]}}...</div>
+			<div class="blog_content">{{blog.blog_content[0:1000]}}...</div>
 			<a href="/{{blog.url_title}}/" class="readmore">Read more</a>
 			{% if admin %}
 				<div class="edit"><a href="/{{blog.url_title}}/edit">edit post</a>
