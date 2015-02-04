@@ -26,16 +26,21 @@ class Blogpost(db.Model):
 
 class Project(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	title = db.Column(db.String(140))
+	title = db.Column(db.String(140), unique=True)
 	preview = db.Column(db.String(140))
 	tldr = db.Column(db.Text)
 	url = db.Column(db.String(140))
+	deleted = db.Column(db.Boolean)
 
 	def __init__(self, title, preview, tldr, url):
 		self.title = title
 		self.preview = preview
 		self.tldr = tldr
 		self.url = url
+
+	def delete(self):
+		self.deleted = True
+
 
 class User(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True)
