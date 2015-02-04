@@ -1,4 +1,4 @@
-{% extends "base_main.html" %}
+{% extends "base_html.html" %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -13,11 +13,11 @@
 </div>
 {% endblock %}
 
-{% block blogposts %}
-
+{% block content %}
 <div id="blogposts" class="inner_section show">
 	{% if admin %}
 	<div id="create" class="shadow"><a href="/create_blogpost">Create blogpost</a></div>
+	<div id="deleted_posts" class="shadow"><a href="/deleted_posts">View deleted posts</a></div>
 	{% endif %}
 		{% for blog in blogposts %}
 		<div class="blogpost shadow">
@@ -26,14 +26,15 @@
 			<div class="blog_content">{{blog.blog_content[0:500]}}...</div>
 			<a href="{{blog.url_title}}/" class="readmore">Read more</a>
 			{% if admin %}
-			<div class="edit"><a href="{{blog.url_title}}/edit">edit post</a><span> | </span><a href="{{blog.url_title}}/delete">delete post</a></div>
+				<div class="edit"><a href="/{{blog.url_title}}/edit">edit post</a>
+				<span> | </span> 
+				<a href="/{{blog.url_title}}/{% if blog.deleted %}un{% endif %}delete">{% if blog.deleted %}un{% endif %}delete post</a></div>
 			{% endif %}
 		</div>
 		{% endfor %}
 	</div>
-{% endblock %}
 
-{% block projects %}
+
 <div id="projects" class="inner_section hidden">
 	{% for project in projects %}
 			<a href="{{ project.url }}" class="project shadow github">
@@ -45,8 +46,8 @@
 </div>
 {% endblock %}
 
-{% block scripts %}
 
+{% block scripts %}
 <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 <script>
 $(".navbar .navbar-ul a").on("click", function(e){
@@ -73,5 +74,4 @@ $(".navbar .navbar-ul a").on("click", function(e){
 
 });
 </script>
-
 {% endblock %}

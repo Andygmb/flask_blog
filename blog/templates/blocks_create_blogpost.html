@@ -8,17 +8,13 @@
 {% endblock %}
 
 {% block content %}
-<div id="mainwrap">
-	<div class="outer_section">
-		<div id="textarea" class="inner_section show">
-			<form method="POST" action="/submit_blogpost">
-			{{ form.hidden_tag() }}
-			<div class="title"> {{form.title.label}} {{ form.title }}</div>
-			<div class="url_title"> {{form.url_title.label}} {{ form.url_title }}</div>
-			<div class="blog_content">{{ form.blog_content }}</div>
-			<div class="submit">{{ form.submit }}</div>
-			</form>
-		</div>
-	</div>
+<div id="textarea" class="inner_section show">
+	<form method="POST" action="/submit_blogpost">
+	{{ form.hidden_tag() }}
+	<div class="title"> {{form.title.label}} {{ form.title }}</div>
+	<div class="url_title"> {{form.url_title.label}} {{ form.url_title }}</div>
+	<div class="blog_content">{{ form.blog_content }}</div>
+	<div class="submit">{{ form.submit }}</div>
+	</form>
 </div>
 {% endblock %}

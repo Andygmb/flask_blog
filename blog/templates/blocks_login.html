@@ -12,9 +12,6 @@
 {% endblock %}
 
 {% block content %}
-<div id="mainwrap">
-
-	<div class="outer_section">
 		<div id="login" class="inner_section show">
 			<div id="loginform" class="shadow">
 				<form method="POST" action="/login">
@@ -27,11 +24,11 @@
 				</form>
 			</div>
 		</div>
-	</div>
-
-</div>
 
 
+{% endblock %}
+
+{% block scripts %}
 <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 <script>
 $("button").on("click", function(e){
@@ -71,5 +68,4 @@ $("button").on("click", function(e){
 	return false;
 });
 </script>
-
 {% endblock %}
