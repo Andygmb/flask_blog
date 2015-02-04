@@ -212,7 +212,8 @@ and (max-device-width : 480px) {
 margin:0.5em 0em;
 line-height:1.1em;
 }
-.blogpost ol, ul {
+.blogpost ol, 
+.blogpost ul {
 margin:0.3em 0em; 
 margin-left:2em;
 }
@@ -393,13 +394,19 @@ text-indent:3px;
 #textarea form .url {
 margin-bottom:1em;
 }
-#textarea form .title input,
+#textarea .projectsubmit form .title input,
 #textarea form .preview input,
 #textarea form .url input{
 width:50%;
 font-size:1.5em;
 margin-left:0.3em;
 float:right;
+}
+
+#textarea  form .title input{
+width:50%;
+font-size:1.5em;
+margin-left:0.3em;
 }
 #textarea form .url_title input{
 width:30%;
