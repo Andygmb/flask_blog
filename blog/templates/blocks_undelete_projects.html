@@ -14,7 +14,7 @@
 {% block content %}
 <div id="projects" class="inner_section show">
 	{% for project in projects %}
-		{% if not project.deleted %}
+		{% if project.deleted %}
 			<div class="project shadow">
 
 				<a href="{{ project.url }}"><div class="title"><h1>{{ project.title }}</h1></div></a>

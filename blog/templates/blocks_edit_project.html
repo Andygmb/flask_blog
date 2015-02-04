@@ -1,0 +1,23 @@
+{% extends "base_html.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block navbar %}
+<div class="navbar shadow">
+	<div class="navbar-title left"><h1><a href="/" data="#blogposts">andygmb</a></h1></div>
+	<div class="clear"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="textarea" class="projectsubmit inner_section show">
+	<form method="POST" action="/submit_project">
+	{{ form.hidden_tag() }}
+	<div class="title"> {{form.title.label}} {{ form.title (readonly="readonly", class="readonly") }}</div>
+	<div class="preview"> {{form.preview.label}} {{ form.preview }}</div>
+	<div class="url"> {{ form.url.label }} {{ form.url }}</div>
+	<div class="tldr">{{ form.tldr }}</div>
+	<div class="submit">{{ form.submit }}</div>
+	</form>
+</div>
+{% endblock %}

@@ -16,8 +16,10 @@
 {% block content %}
 <div id="blogposts" class="inner_section show">
 	{% if admin %}
-	<div id="create" class="shadow"><a href="/create_blogpost">Create blogpost</a></div>
-	<div id="deleted_posts" class="shadow"><a href="/deleted_posts">View deleted posts</a></div>
+	<div class="create shadow"><a href="/create_blogpost">Create blogpost</a></div>
+	<div class="deleted_posts shadow"><a href="/deleted_posts">View deleted posts</a></div>
+	<div class="create shadow"><a href="/create_project">Create project</a></div>
+	<div class="deleted_projects shadow"><a href="/deleted_projects">View deleted projects</a></div>
 	{% endif %}
 		{% for blog in blogposts %}
 		<div class="blogpost shadow">
@@ -45,11 +47,25 @@
 
 <div id="projects" class="inner_section hidden">
 	{% for project in projects %}
-			<a href="{{ project.url }}" class="project shadow github">
-				<div class="title"><h1>{{ project.title }}</h1></div>
-				<img class="preview" src="../static/images/{{ project.preview }}.png">
+		{% if not project.deleted %}
+			<div class="project shadow">
+
+				<a href="{{ project.url }}"><div class="title"><h1>{{ project.title }}</h1></div></a>
+				<img class="preview" src="../static/images/{{ project.preview }}">
 				<div class="tldr"><p>{{ project.tldr }}</p></div>
-			</a>
+				<div class="github"><a href="{{ project.url }}">view on github</a></div>
+				
+				{% if admin %}
+					<div class="shadow edit">
+						<a href="/{{project.title}}/{% if project.deleted %}un{% endif %}delete_project">{% if project.deleted %}un{% endif %}delete project</a>
+					</div>
+
+					<div class="shadow edit">
+						<a href="/{{ project.title }}/edit_project">edit project</a>
+					</div>
+				{% endif %}
+			</div>
+		{% endif %}
 	{% endfor %}
 </div>
 {% endblock %}
