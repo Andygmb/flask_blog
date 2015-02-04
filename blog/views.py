@@ -54,6 +54,16 @@ def edit_blogpost_commit():
 	db.session.commit()
 	return redirect("/"+blogpost.url_title)
 
+
+@app.route('/deleted_posts')
+@login_required
+def get_deleted():
+	blogposts = Blogpost.query.order_by(Blogpost.id.desc()).filter_by(deleted=True).all()
+	for blog in blogposts[:]:
+		blog.blog_content = Markup(markdown.markdown(blog.blog_content))
+	return render_template("blocks_undelete_blogs.html", blogposts=blogposts, admin=True)
+
+
 @app.route('/login',methods=['GET','POST'])
 def login():
 	form = LoginForm()
@@ -78,6 +88,8 @@ def check_for_blogpost(value):
 	blogpost.blog_content = Markup(markdown.markdown(blogpost.blog_content))
 	if current_user.is_authenticated():
 		return render_template("blocks_blogpost.html", blog=blogpost, admin=True)
+	if blogpost.deleted:
+		return render_template("blocks_blog_deleted.html", blog=blogpost)
 	return render_template("blocks_blogpost.html", blog=blogpost)
 
 @app.route('/<value>/edit')
@@ -98,15 +110,6 @@ def delete_blogpost(value):
 	blogpost.delete()
 	db.session.commit()
 	return redirect("/")
-
-@app.route('/deleted_posts')
-@login_required
-def get_deleted():
-	blogposts = Blogpost.query.filter_by(deleted=True).all()
-	blog_url_titles = []
-	for blog in blogposts:
-		blog_url_titles.append(blog.url_title)
-	return json.dumps(blog_url_titles)
 
 @lm.user_loader
 def load_user(userid):

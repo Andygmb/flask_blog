@@ -227,12 +227,19 @@ margin-left:2em;
 margin-bottom:1em;
 }
 
-#blogposts #create{
+#blogposts #create,
+#blogposts #deleted_posts{
 display:inline-block;
 margin-bottom:1em;
+margin-right:1em;
 padding:1em;
 }
 
+
+#blogposts .noblogfound {
+	font-size:3em;
+	text-align:center;
+}
 a {
 text-decoration:none;
 color:#0079D3;
