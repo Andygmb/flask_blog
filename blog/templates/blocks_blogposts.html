@@ -15,7 +15,7 @@
 <div id="blogposts" class="inner_section show">
 	{% for blog in blogposts %}
 	<div class="blogpost shadow">
-		<div class="date">{{blog.date}}</div>
+		<div class="date">by {{blog.name}} on {{blog.date}}</div>
 		<div class="title"><h1>{{blog.title}}</h1></div>
 		<div class="blog_content">{{blog.blog_content[0:500]}}...</div>
 		<a href="{{blog.url_title}}/" class="readmore">Read more</a>
