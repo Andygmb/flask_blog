@@ -1,3 +1,4 @@
+{% if not ajax %}
 {% extends "base_html.html" %}
 
 {% block title %}{{ title }}{% endblock %}
@@ -8,19 +9,22 @@
 	<div class="clear"></div>
 </div>
 {% endblock %}
+{% endif %}
 
 {% block content %}
 <div id="blogposts" class="inner_section show">
+	{% for blog in blogposts %}
 	<div class="blogpost shadow">
 		<div class="date">{{blog.date}}</div>
 		<div class="title"><h1>{{blog.title}}</h1></div>
-		<div class="blog_content">{{blog.blog_content}}</div>
-		<a href="/" class="readmore">Return to home</a>
+		<div class="blog_content">{{blog.blog_content[0:500]}}...</div>
+		<a href="{{blog.url_title}}/" class="readmore">Read more</a>
 		{% if admin %}
 			<div class="edit"><a href="/{{blog.url_title}}/edit">edit post</a>
 			<span> | </span> 
 			<a href="/{{blog.url_title}}/{% if blog.deleted %}un{% endif %}delete">{% if blog.deleted %}un{% endif %}delete post</a></div>
 		{% endif %}
 	</div>
+	{% endfor %}
 </div>
 {% endblock %}

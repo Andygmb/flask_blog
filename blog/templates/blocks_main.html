@@ -21,10 +21,11 @@
 	{% endif %}
 		{% for blog in blogposts %}
 		<div class="blogpost shadow">
-			<div class="date">{{blog.date}}</div>
+		{{blog.id}}
+			<div class="date">by {{blog.name}} on {{blog.date}}</div>
 			<div class="title"><h1>{{blog.title}}</h1></div>
 			<div class="blog_content">{{blog.blog_content[0:500]}}...</div>
-			<a href="{{blog.url_title}}/" class="readmore">Read more</a>
+			<a href="/{{blog.url_title}}/" class="readmore">Read more</a>
 			{% if admin %}
 				<div class="edit"><a href="/{{blog.url_title}}/edit">edit post</a>
 				<span> | </span> 
@@ -32,6 +33,13 @@
 			{% endif %}
 		</div>
 		{% endfor %}
+	{% if not blogposts|length < 5 %}
+		<div id="moreposts" class="shadow right"><a href="/more/{{ blogposts[-1].id }}">older posts</a></div>
+	{% endif %}
+	{% if prev %}
+		<div id="prevposts" class="shadow right"><a href="/prev/{{ blogposts[0].id }}">newer posts</a></div>
+	{% endif %}
+
 	</div>
 
 

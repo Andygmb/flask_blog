@@ -1,0 +1,24 @@
+{% if not ajax %}
+{% extends "base_html.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block navbar %}
+<div class="navbar shadow">
+	<div class="navbar-title left"><h1><a href="/" data="#blogposts">andygmb</a></h1></div>
+	<div class="clear"></div>
+</div>
+{% endblock %}
+{% endif %}
+
+{% block content %}
+<div id="projects" class="inner_section show">
+		{% for project in projects %}
+		<a href="{{ project.url }}" class="project shadow github">
+			<div class="title"><h1>{{ project.title }}</h1></div>
+			<img class="preview" src="../static/images/{{ project.preview }}">
+			<div class="tldr"><p>{{ project.tldr }}</p></div>
+		</a>
+		{% endfor %}
+</div>
+{% endblock %}

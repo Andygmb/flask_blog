@@ -9,7 +9,7 @@ class Blogpost(db.Model):
 	name = db.Column(db.String(100))
 	date = db.Column(db.Date)
 	title = db.Column(db.String(140))
-	url_title = db.Column(db.String(70))
+	url_title = db.Column(db.String(70), unique=True)
 	deleted = db.Column(db.Boolean)
 
 	def __init__(self, name, blog_content, title, url_title):
@@ -22,10 +22,6 @@ class Blogpost(db.Model):
 
 	def delete(self):
 		self.deleted = True
-
-	def is_deleted(self):
-		return self.deleted
-
 
 
 class Project(db.Model):
@@ -43,7 +39,7 @@ class Project(db.Model):
 
 class User(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True)
-	username = db.Column(db.String(40))
+	username = db.Column(db.String(40), unique=True)
 	password = db.Column(db.String(150))
 
 	def __init__(self, username, password):

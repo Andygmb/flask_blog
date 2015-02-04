@@ -236,6 +236,18 @@ padding:1em;
 }
 
 
+#blogposts #prevposts {
+display:inline-block;
+margin-bottom:1em;
+padding:1em;
+}
+#blogposts #moreposts {
+display:inline-block;
+margin-bottom:1em;
+margin-left:1em;
+padding:1em;
+}
+
 #blogposts .noblogfound {
 	font-size:3em;
 	text-align:center;
