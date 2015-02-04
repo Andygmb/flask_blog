@@ -227,14 +227,22 @@ margin-left:2em;
 margin-bottom:1em;
 }
 
-#blogposts #create,
-#blogposts #deleted_posts{
+#blogposts .create,
+#blogposts .deleted_posts,
+#blogposts .deleted_projects{
 display:inline-block;
 margin-bottom:1em;
 margin-right:1em;
 padding:1em;
 }
 
+#projects .edit,
+#projects .delete {
+display:inline-block;
+margin-bottom:1em;
+margin-right:1em;
+padding:1em;
+}
 
 #blogposts #prevposts {
 display:inline-block;
@@ -268,7 +276,6 @@ font-size:0.8em;
 float:right;
 font-size:0.8em;
 }
-}
 .project {
 background-color:#fff;
 position:relative;
@@ -286,42 +293,14 @@ color:#666 !important;
 transition: all 1s ease;
 }
 
-.project.github:hover {
-background-color:gray;
+#projects .edit {
+margin-top:1em;
 }
-.project.github:hover::before {
-background-color:inherit;
-display:block;
-position:absolute;
-top:0px;
-left:0px;
-opacity:0.8;
-text-indent:-9999px;
-content:"view on github";
-width:100%;
-height:100%;
-}
-.project.github:after{
-background-image:url(../images/github.png);
-background-repeat:no-repeat;
-background-position:center;
-opacity:0;
-display:block;
-position:absolute;
-top:0px;
-left:0px;
+
+.github{
 text-align:center;
-padding-top:1em;
-color:#fff;
-content:"view on github";
-width:100%;
-height:100%;
+margin-top:1em;
 }
-
-.project.github:hover::after{
-	opacity:1;
-}
-
 .project img {
 margin-bottom:0.2em;
 width:100%;
@@ -371,6 +350,10 @@ margin:0.3em 0;
 width:100%;
 font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+#textarea.projectsubmit form {
+width:50%;
+font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 
 #textarea form input,
 #textarea form textarea,
@@ -391,21 +374,40 @@ border:0px;
 overflow-x:hidden;
 text-indent:3px;
 }
+
+#textarea form .tldr textarea {
+background-color:#eee;
+font-size:1em;
+height:10em;
+padding:0em;
+margin:0em;
+border:0px;
+overflow-x:hidden;
+text-indent:3px;
+}
+
+
 #textarea form .title,
-#textarea form .url_title {
+#textarea form .url_title,
+#textarea form .preview, 
+#textarea form .url {
 margin-bottom:1em;
 }
-#textarea form .title input{
+#textarea form .title input,
+#textarea form .preview input,
+#textarea form .url input{
 width:50%;
 font-size:1.5em;
 margin-left:0.3em;
+float:right;
 }
 #textarea form .url_title input{
 width:30%;
 font-size:1.5em;
 margin-left:0.3em;
 }
-.url_title .readonly {
+
+.readonly {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -422,6 +424,7 @@ padding: 1px;
 background-color: #eee;
 cursor: auto;
 }
+
 #textarea .submit input{
 	width:100%;
 	margin:0px !important;
