@@ -1,6 +1,6 @@
 from blog import app, db, lm, cache
 from blog.models import User, Project, Blogpost
-from blog.forms import LoginForm, BlogpostForm
+from blog.forms import LoginForm, BlogpostForm, ProjectForm
 from flask import Flask, render_template, request, flash, session, redirect, url_for, Markup
 from flask.ext.login import login_user, logout_user, current_user, login_required
 import json
@@ -59,6 +59,89 @@ def edit_blogpost_commit():
 	blogpost.url_title = form.url_title.data
 	db.session.commit()
 	return redirect("/"+blogpost.url_title)
+
+
+@app.route("/submit_project", methods=['POST'])
+@login_required
+def submit_project():
+	form = ProjectForm()
+	project = Project(
+		title=form.title.data,
+		preview=form.preview.data,
+		url=form.url.data,
+		tldr=form.tldr.data
+		)
+	db.session.add(project)
+	db.session.commit()
+	with app.app_context():
+		cache.clear()
+	return redirect("/projects")
+
+
+@app.route('/create_project/', methods=['GET','POST'])
+@login_required
+def new_project():
+	title = "andygmb | create project"
+	form = ProjectForm()
+	if request.method == "POST":
+		with app.app_context():
+			cache.clear()
+		return render_template("ajax_create_project.html", form=form)
+	return render_template("blocks_create_project.html", form=form, title=title)
+
+@app.route('/edit_project', methods=['POST'])
+@login_required
+def edit_project_commit():
+	with app.app_context():
+		cache.clear()
+	form = ProjectForm()
+	project = Project.query.filter_by(title=form.title.data).first()
+	project.title = form.title.data,
+	project.preview = form.preview.data,
+	project.url = form.url.data,
+	project.tldr = form.tldr.data
+	db.session.commit()
+	return redirect("/projects")
+
+@app.route('/<value>/edit_project')
+@login_required
+def edit_project(value):
+	title = "andygmb | edit post"
+	project = Project.query.filter_by(title=value).first_or_404()
+	form = ProjectForm()
+	h = html2text.HTML2Text()
+	form.title.data = project.title
+	form.preview.data = project.preview
+	form.url.data = project.url 
+	form.tldr.data = project.tldr
+	return render_template("blocks_edit_project.html", form=form, title=title)
+
+@app.route('/<value>/delete_project')
+@login_required
+def delete_project(value):
+	with app.app_context():
+		cache.clear()
+	project = Project.query.filter_by(title=value).first_or_404()
+	project.delete()
+	db.session.commit()
+	return redirect("/projects")
+
+@app.route('/<value>/undelete_project')
+@login_required
+def undelete_project(value):
+	with app.app_context():
+		cache.clear()
+	project = Project.query.filter_by(title=value).first_or_404()
+	project.deleted = False
+	db.session.commit()
+	return redirect("/projects")
+
+@app.route('/deleted_projects')
+@login_required
+def get_deleted_projects():
+	title = "andygmb | deleted projects"
+	project = Project.query.filter_by(deleted=True).all()
+	return render_template("blocks_undelete_projects.html", projects=project, admin=True, title=title)
 
 
 @app.route('/deleted_posts')
