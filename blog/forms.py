@@ -21,3 +21,10 @@ class BlogpostForm(Form):
 	url_title = TextField("Short URL title:")
 	blog_content = TextAreaField()
 	submit = SubmitField()
+
+class ProjectForm(Form):
+	title = TextField("Title:")
+	preview = TextField("Preview image name:")
+	url = TextField("URL:")
+	tldr = TextAreaField("tldr")
+	submit = SubmitField()
