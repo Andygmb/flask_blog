@@ -260,7 +260,6 @@ def get_prev_from_id(b_id):
 
 
 @app.route('/<value>/')
-@cache.memoize(timeout=600)
 def check_for_blogpost(value):
 	blogpost = Blogpost.query.filter_by(url_title=value).first_or_404()
 	title = "andygmb | " + blogpost.title
