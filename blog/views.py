@@ -6,20 +6,25 @@ from flask.ext.login import login_user, current_user, login_required
 import markdown
 import html2text
 
-
-@app.route('/')
-@cache.cached(timeout=600)
-def hello_world():
-	title = "andygmb"
+@cache.memoize(timeout=600)
+def get_blogposts_and_projects():
 	blogposts = Blogpost.query.filter_by(deleted=False).order_by(Blogpost.id.desc()).limit(5).all()
 	projects = Project.query.all()
+	return blogposts, projects
+
+@app.route('/')
+def hello_world():
+	title = "andygmb"
+	admin = False
+	blogposts, projects = get_blogposts_and_projects()
 	blogposts = markdown_parse(blogposts)
 	if current_user.is_authenticated():
-		return render_template("blocks_main.html", blogposts=blogposts, projects=projects, admin=True, title=title)
-	return render_template("blocks_main.html", blogposts=blogposts, projects=projects, title=title)
+		admin = True
+		return render_template("blocks_main.html", blogposts=blogposts, projects=projects, admin=admin, title=title)
+	return render_template("blocks_main.html", blogposts=blogposts, projects=projects, title=title, admin=admin)
 
 @app.route('/projects')
-@cache.cached(timeout=600)
+#@cache.memoize(timeout=600)
 def projects():
 	title = "andygmb | projects"
 	projects = Project.query.order_by(Project.id.desc()).all()
@@ -28,7 +33,7 @@ def projects():
 	return render_template("blocks_projects.html", ajax=False, projects=projects, title=title)
 
 @app.route('/blog')
-@cache.cached(timeout=600)
+#@cache.memoize(timeout=600)
 def blogs():
 	title = "andygmb | blog"
 	blogposts = Blogpost.query.order_by(Blogpost.id.desc()).limit(5).all()
