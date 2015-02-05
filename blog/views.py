@@ -19,154 +19,6 @@ def hello_world():
 		return render_template("blocks_main.html", blogposts=blogposts, projects=projects, admin=True, title=title)
 	return render_template("blocks_main.html", blogposts=blogposts, projects=projects, title=title)
 
-@app.route("/submit_blogpost", methods=['POST'])
-@login_required
-def submit_blog():
-	form = BlogpostForm()
-	blogpost = Blogpost(
-		name=current_user.username,
-		blog_content=form.blog_content.data,
-		title=form.title.data,
-		url_title=form.url_title.data
-		)
-	db.session.add(blogpost)
-	db.session.commit()
-	with app.app_context():
-		cache.clear()
-	return redirect("/"+form.url_title.data)
-
-
-@app.route('/create_blogpost/', methods=['GET','POST'])
-@login_required
-def new_blogpost():
-	title = "andygmb | create blogpost"
-	form = BlogpostForm()
-	if request.method == "POST":
-		with app.app_context():
-			cache.clear()
-		return render_template("ajax_create_blogpost.html", form=form)
-	return render_template("blocks_create_blogpost.html", form=form, title=title)
-
-@app.route('/edit_blogpost', methods=['POST'])
-@login_required
-def edit_blogpost_commit():
-	with app.app_context():
-		cache.clear()
-	form = BlogpostForm()
-	blogpost = Blogpost.query.filter_by(url_title=form.url_title.data).first()
-	blogpost.blog_content = form.blog_content.data
-	blogpost.title = form.title.data
-	blogpost.url_title = form.url_title.data
-	db.session.commit()
-	return redirect("/"+blogpost.url_title)
-
-
-@app.route("/submit_project", methods=['POST'])
-@login_required
-def submit_project():
-	form = ProjectForm()
-	project = Project(
-		title=form.title.data,
-		preview=form.preview.data,
-		url=form.url.data,
-		tldr=form.tldr.data
-		)
-	db.session.add(project)
-	db.session.commit()
-	with app.app_context():
-		cache.clear()
-	return redirect("/projects")
-
-
-@app.route('/create_project/', methods=['GET','POST'])
-@login_required
-def new_project():
-	title = "andygmb | create project"
-	form = ProjectForm()
-	if request.method == "POST":
-		with app.app_context():
-			cache.clear()
-		return render_template("ajax_create_project.html", form=form)
-	return render_template("blocks_create_project.html", form=form, title=title)
-
-@app.route('/edit_project', methods=['POST'])
-@login_required
-def edit_project_commit():
-	with app.app_context():
-		cache.clear()
-	form = ProjectForm()
-	project = Project.query.filter_by(title=form.title.data).first()
-	project.title = form.title.data,
-	project.preview = form.preview.data,
-	project.url = form.url.data,
-	project.tldr = form.tldr.data
-	db.session.commit()
-	return redirect("/projects")
-
-@app.route('/<value>/edit_project')
-@login_required
-def edit_project(value):
-	title = "andygmb | edit post"
-	project = Project.query.filter_by(title=value).first_or_404()
-	form = ProjectForm()
-	h = html2text.HTML2Text()
-	form.title.data = project.title
-	form.preview.data = project.preview
-	form.url.data = project.url 
-	form.tldr.data = project.tldr
-	return render_template("blocks_edit_project.html", form=form, title=title)
-
-@app.route('/<value>/delete_project')
-@login_required
-def delete_project(value):
-	with app.app_context():
-		cache.clear()
-	project = Project.query.filter_by(title=value).first_or_404()
-	project.delete()
-	db.session.commit()
-	return redirect("/projects")
-
-@app.route('/<value>/undelete_project')
-@login_required
-def undelete_project(value):
-	with app.app_context():
-		cache.clear()
-	project = Project.query.filter_by(title=value).first_or_404()
-	project.deleted = False
-	db.session.commit()
-	return redirect("/projects")
-
-@app.route('/deleted_projects')
-@login_required
-def get_deleted_projects():
-	title = "andygmb | deleted projects"
-	project = Project.query.filter_by(deleted=True).all()
-	return render_template("blocks_undelete_projects.html", projects=project, admin=True, title=title)
-
-
-@app.route('/deleted_posts')
-@login_required
-def get_deleted():
-	title = "andygmb | deleted posts"
-	blogposts = Blogpost.query.order_by(Blogpost.id.desc()).filter_by(deleted=True).all()
-	for blog in blogposts[:]:
-		blog.blog_content = Markup(markdown.markdown(blog.blog_content))
-	return render_template("blocks_undelete_blogs.html", blogposts=blogposts, admin=True, title=title)
-
-
-@app.route('/login',methods=['GET','POST'])
-def login():
-	title = "andygmb | login"
-	form = LoginForm()
-	if form.validate_on_submit():
-		session['user_id'] = form.user.id
-		form = BlogpostForm()
-		return render_template("ajax_create_blogpost.html", form=form)
-	if request.method == 'POST':
-		return "false"
-	return render_template("blocks_login.html", form=form, title=title)
-
-
 @app.route('/projects')
 @cache.cached(timeout=600)
 def projects():
@@ -187,6 +39,176 @@ def blogs():
 	if current_user.is_authenticated():
 		return render_template("blocks_blogposts.html", blogposts=blogposts, admin=True, title=title)
 	return render_template("blocks_blogposts.html", ajax=False, blogposts=blogposts, title=title)
+
+@app.route("/submit/<entry_type>/", methods=['POST'])
+@login_required
+def submit_blog(entry_type):
+	if entry_type.lower() == "blogpost":
+		form = BlogpostForm()
+		blogpost = Blogpost(
+			name=current_user.username,
+			blog_content=form.blog_content.data,
+			title=form.title.data,
+			url_title=form.url_title.data
+			)
+		db.session.add(blogpost)
+		db.session.commit()
+		with app.app_context():
+			cache.clear()
+		return redirect("/"+form.url_title.data)
+	if entry_type.lower() == "project":
+		form = ProjectForm()
+		project = Project(
+			title=form.title.data,
+			preview=form.preview.data,
+			url=form.url.data,
+			tldr=form.tldr.data
+			)
+		db.session.add(project)
+		db.session.commit()
+		with app.app_context():
+			cache.clear()
+		return redirect("/projects")
+	return redirect("/")
+
+@app.route('/create/<entry_type>/', methods=['GET','POST'])
+@login_required
+def new_blogpost(entry_type):
+	if entry_type.lower() == "blogpost":
+		title = "andygmb | create blogpost"
+		form = BlogpostForm()
+		if request.method == "POST":
+			with app.app_context():
+				cache.clear()
+			return render_template("ajax_create_blogpost.html", form=form)
+		return render_template("blocks_create_blogpost.html", form=form, title=title)
+	if entry_type.lower() == "project":
+		title = "andygmb | create project"
+		form = ProjectForm()
+		if request.method == "POST":
+			with app.app_context():
+				cache.clear()
+			return render_template("ajax_create_project.html", form=form)
+		return render_template("blocks_create_project.html", form=form, title=title)
+	return redirect("/")
+
+@app.route('/edit/<entry_type>/', methods=['POST'])
+@login_required
+def edit_blogpost_commit(entry_type):
+	if entry_type.lower() == "blogpost":
+		with app.app_context():
+			cache.clear()
+		form = BlogpostForm()
+		blogpost = Blogpost.query.filter_by(url_title=form.url_title.data).first()
+		blogpost.blog_content = form.blog_content.data
+		blogpost.title = form.title.data
+		blogpost.url_title = form.url_title.data
+		db.session.commit()
+		return redirect("/"+blogpost.url_title)
+	if entry_type.lower() == "project":
+		with app.app_context():
+			cache.clear()
+		form = ProjectForm()
+		project = Project.query.filter_by(title=form.title.data).first()
+		project.title = form.title.data,
+		project.preview = form.preview.data,
+		project.url = form.url.data,
+		project.tldr = form.tldr.data
+		db.session.commit()
+		return redirect("/projects")
+	return redirect("/")
+
+@app.route('/<value>/<entry_type>/edit')
+@login_required
+def edit_blogpost(value, entry_type):
+	if entry_type.lower() == "blogpost":
+		title = "andygmb | edit post"
+		blogpost = Blogpost.query.filter_by(url_title=value).first_or_404()
+		form = BlogpostForm()
+		h = html2text.HTML2Text()
+		form.blog_content.data = h.handle(Markup(markdown.markdown(blogpost.blog_content)))
+		form.title.data = h.handle(Markup(markdown.markdown(blogpost.title)))
+		form.url_title.data = h.handle(Markup(markdown.markdown(blogpost.url_title)))
+		return render_template("blocks_edit_blogpost.html", form=form, title=title)
+
+	if entry_type.lower() == 'project':
+		title = "andygmb | edit post"
+		project = Project.query.filter_by(title=value).first_or_404()
+		form = ProjectForm()
+		h = html2text.HTML2Text()
+		form.title.data = project.title
+		form.preview.data = project.preview
+		form.url.data = project.url 
+		form.tldr.data = project.tldr
+		return render_template("blocks_edit_project.html", form=form, title=title)
+	return redirect("/")
+
+@app.route('/<value>/<entry_type>/delete')
+@login_required
+def delete_blogpost(value, entry_type):
+	with app.app_context():
+		cache.clear()
+
+	if entry_type.lower() == "blogpost":
+		blogpost = Blogpost.query.filter_by(url_title=value).first_or_404()
+		blogpost.delete()
+		db.session.commit()
+		return redirect("/")
+
+	if entry_type.lower() == "project":
+		project = Project.query.filter_by(title=value).first_or_404()
+		project.delete()
+		db.session.commit()
+		return redirect("/projects")
+
+	return redirect("/")
+
+@app.route('/<value>/<entry_type>/undelete')
+@login_required
+def undelete_blogpost(value, entry_type):
+	if entry_type.lower() == "blogpost":
+		with app.app_context():
+			cache.clear()
+		blogpost = Blogpost.query.filter_by(url_title=value).first_or_404()
+		blogpost.deleted = False
+		db.session.commit()
+		return redirect("/" + blogpost.url_title)
+	if entry_type.lower() == "project":
+		with app.app_context():
+			cache.clear()
+		project = Project.query.filter_by(title=value).first_or_404()
+		project.deleted = False
+		db.session.commit()
+		return redirect("/projects")
+	return redirect("/")
+
+@app.route('/deleted/<entry_type>/')
+@login_required
+def get_deleted_projects(entry_type):
+	if entry_type.lower() == "projects":
+		title = "andygmb | deleted projects"
+		project = Project.query.filter_by(deleted=True).all()
+		return render_template("blocks_undelete_projects.html", projects=project, admin=True, title=title)
+	if entry_type.lower() == "blogposts":
+		title = "andygmb | deleted posts"
+		blogposts = Blogpost.query.order_by(Blogpost.id.desc()).filter_by(deleted=True).all()
+		for blog in blogposts[:]:
+			blog.blog_content = Markup(markdown.markdown(blog.blog_content))
+		return render_template("blocks_undelete_blogs.html", blogposts=blogposts, admin=True, title=title)
+
+
+@app.route('/login',methods=['GET','POST'])
+def login():
+	title = "andygmb | login"
+	form = LoginForm()
+	if form.validate_on_submit():
+		session['user_id'] = form.user.id
+		form = BlogpostForm()
+		return render_template("ajax_create_blogpost.html", form=form)
+	if request.method == 'POST':
+		return "false"
+	return render_template("blocks_login.html", form=form, title=title)
+
 
 @app.route('/more/<b_id>')
 @cache.memoize(timeout=600)
@@ -245,37 +267,6 @@ def check_for_blogpost(value):
 		return render_template("blocks_blog_deleted.html", blog=blogpost, title=title)
 	return render_template("blocks_blogpost.html", blog=blogpost, title=title)
 
-@app.route('/<value>/edit')
-@login_required
-def edit_blogpost(value):
-	title = "andygmb | edit post"
-	blogpost = Blogpost.query.filter_by(url_title=value).first_or_404()
-	form = BlogpostForm()
-	h = html2text.HTML2Text()
-	form.blog_content.data = h.handle(Markup(markdown.markdown(blogpost.blog_content)))
-	form.title.data = h.handle(Markup(markdown.markdown(blogpost.title)))
-	form.url_title.data = h.handle(Markup(markdown.markdown(blogpost.url_title)))
-	return render_template("blocks_edit_blogpost.html", form=form, title=title)
-
-@app.route('/<value>/delete')
-@login_required
-def delete_blogpost(value):
-	with app.app_context():
-		cache.clear()
-	blogpost = Blogpost.query.filter_by(url_title=value).first_or_404()
-	blogpost.delete()
-	db.session.commit()
-	return redirect("/")
-
-@app.route('/<value>/undelete')
-@login_required
-def undelete_blogpost(value):
-	with app.app_context():
-		cache.clear()
-	blogpost = Blogpost.query.filter_by(url_title=value).first_or_404()
-	blogpost.deleted = False
-	db.session.commit()
-	return redirect("/" + blogpost.url_title)
 
 @lm.user_loader
 def load_user(userid):

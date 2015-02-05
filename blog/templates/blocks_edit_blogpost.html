@@ -11,10 +11,10 @@
 
 {% block content %}
 <div id="textarea" class="inner_section show">
-	<form method="POST" action="/edit_blogpost">
+	<form method="POST" action="/edit/blogpost">
 	{{ form.hidden_tag() }}
 	<div class="title"> {{form.title.label}} {{ form.title }}</div>
-	<div class="url_title"> {{form.url_title.label}}{{ form.url_title(readonly="readonly", class="readonly")}}</div>
+	<div class="url_title"> {{form.url_title.label}}{{ form.url_title(readonly="readonly", class="readonly")}} </div>
 	<div class="blog_content">{{ form.blog_content }}</div>
 	<div class="submit">{{ form.submit }}</div>
 	</form>

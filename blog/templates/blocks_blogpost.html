@@ -17,7 +17,7 @@
 		<div class="blog_content">{{blog.blog_content}}</div>
 		<a href="/" class="readmore">Return to home</a>
 		{% if admin %}
-			<div class="edit"><a href="/{{blog.url_title}}/edit">edit post</a>
+			<div class="edit"><a href="/{{blog.url_title}}/blogpost/edit">edit post</a>
 			<span> | </span> 
 			<a href="/{{blog.url_title}}/{% if blog.deleted %}un{% endif %}delete">{% if blog.deleted %}un{% endif %}delete post</a></div>
 		{% endif %}

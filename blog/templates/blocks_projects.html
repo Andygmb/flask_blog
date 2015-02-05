@@ -24,11 +24,11 @@
 				
 				{% if admin %}
 					<div class="shadow edit">
-						<a href="/{{project.title}}/{% if project.deleted %}un{% endif %}delete_project">{% if project.deleted %}un{% endif %}delete project</a>
+						<a href="/{{project.title}}/project/{% if project.deleted %}un{% endif %}delete">{% if project.deleted %}un{% endif %}delete project</a>
 					</div>
 
 					<div class="shadow edit">
-						<a href="/{{ project.title }}/edit_project">edit project</a>
+						<a href="/{{ project.title }}/project/edit">edit project</a>
 					</div>
 				{% endif %}
 			</div>
