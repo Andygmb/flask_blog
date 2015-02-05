@@ -3,6 +3,10 @@ body {
 overflow-x: hidden;
 }
 
+html {
+height:100.1%;
+}
+
 body {
 font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
 color: #666666;
@@ -16,11 +20,46 @@ height:100%;
 margin-top:1em;
 }
 
-.navbar {
+
+#navbarwrap {
 position:relative;
 z-index:999;
 max-width:100%;
 background-color: #03A9F4;
+-webkit-box-shadow:0 2px 5px rgba(0, 0, 0, 0.26);
+box-shadow:0 2px 5px rgba(0, 0, 0, 0.26);
+}
+
+.navbar {
+	width:90%;
+	margin:0 auto;
+-webkit-transition: width 1s ease;
+-moz-transition: width 1s ease;
+-o-transition: width 1s ease;
+-ms-transition: width 1s ease;
+transition: width 1s ease;
+}
+
+.bottomborder {
+	position:relative;
+}
+
+.bottomborder:after {
+content:""; 
+background: white; 
+position: absolute; 
+bottom: -0.3em; 
+left: 55%; 
+height: 1px; 
+width: 50%;
+-webkit-transition: left 0.3s linear;
+-moz-transition: left 0.3s linear;
+-o-transition: left 0.3s linear;
+-ms-transition: left 0.3s linear;
+transition: left 0.3s linear;
+}
+.bottomborder.slideright:after {
+left: 0.3em; 
 }
 
 /* Smartphones (portrait and landscape) ----------- */
@@ -69,15 +108,15 @@ margin:0 auto;
 position:relative;
 overflow:visible;
 -webkit-transition: width 1s ease;
--moz-transition: all 1s ease;
--o-transition: all 1s ease;
--ms-transition: all 1s ease;
-transition: all 1s ease;
+-moz-transition: width 1s ease;
+-o-transition: width 1s ease;
+-ms-transition: width 1s ease;
+transition: width 1s ease;
 }
 
 @media only screen 
 and (min-width : 1824px) {
-	.outer_section {
+	.outer_section, .navbar{
 	width:70%;
 	}
 }

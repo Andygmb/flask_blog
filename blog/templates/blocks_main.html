@@ -3,11 +3,13 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block navbar %}
-<div class="navbar shadow">
+<div class="navbar">
 	<div class="navbar-title left"><h1><a href="/" data="#blogposts">andygmb</a></h1></div>
 	<ul class="navbar-ul right">
+		<div class="bottomborder">
 		<li><a href="/projects" data="#projects">projects</a></li>
 		<li><a href="/blog" data="#blogposts">blog</a></li>
+		</div>
 	</ul>
 	<div class="clear"></div>
 </div>
@@ -75,9 +77,11 @@
 <script>
 $(".navbar .navbar-ul a").on("click", function(e){
 	e.preventDefault();
+	bottomborder = $(this).closest(".bottomborder")
 	clicked = $($(this).attr("data"))
 	shown = $(".show")
 	if (clicked.hasClass("hidden") & !clicked.is(':animated')) {
+		bottomborder.toggleClass("slideright")
 		shown.animate({"right":"-110%"},{
 			queue:false, 
 			duration:300,
