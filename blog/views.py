@@ -1,9 +1,8 @@
 from blog import app, db, lm, cache
 from blog.models import User, Project, Blogpost
 from blog.forms import LoginForm, BlogpostForm, ProjectForm
-from flask import Flask, render_template, request, flash, session, redirect, url_for, Markup
-from flask.ext.login import login_user, logout_user, current_user, login_required
-import json
+from flask import Flask, render_template, request, session, redirect, url_for, Markup
+from flask.ext.login import login_user, current_user, login_required
 import markdown
 import html2text
 
