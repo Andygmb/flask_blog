@@ -45,7 +45,7 @@
 
 	</div>
 
-<div id="projects" class="inner_section hidden">
+<div id="projects" class="inner_section hidden rightside">
 	{% for project in projects %}
 		{% if not project.deleted %}
 			<div class="project shadow">
@@ -81,22 +81,48 @@ $(".navbar .navbar-ul a").on("click", function(e){
 	clicked = $($(this).attr("data"))
 	shown = $(".show")
 	if (clicked.hasClass("hidden") & !clicked.is(':animated')) {
-		bottomborder.toggleClass("slideright")
-		shown.animate({"right":"-110%"},{
-			queue:false, 
-			duration:300,
-			complete:function(){
-				shown.toggle()
-				shown.removeClass("show")
-				shown.addClass("hidden")
-			}});
+
+		if (clicked.hasClass("rightside")) {
+			bottomborder.toggleClass("slideright")
+			shown.animate({"right":"110%"},{
+				queue:false, 
+				duration:300,
+				complete:function(){
+					shown.toggle()
+					shown.addClass("leftside")
+					shown.removeClass("show")
+					shown.addClass("hidden")
+				}});
+
 		clicked.toggle().animate({"right":"0%"}, {
 			queue:false,
 			duration:300,
 			complete:function(){
+				shown.removeClass("rightside")
 				clicked.removeClass("hidden")
 				clicked.addClass("show")
 			}});
+		} else if (clicked.hasClass("leftside")) {
+			bottomborder.toggleClass("slideright")
+			shown.animate({"right":"-110%"},{
+				queue:false, 
+				duration:300,
+				complete:function(){
+					shown.toggle()
+					shown.addClass("leftside")
+					shown.removeClass("show")
+					shown.addClass("hidden")
+				}});
+
+		clicked.toggle().animate({"right":"0%"}, {
+			queue:false,
+			duration:300,
+			complete:function(){
+				shown.removeClass("leftside")
+				clicked.removeClass("hidden")
+				clicked.addClass("show")
+			}});
+		}
 	}
 
 });
