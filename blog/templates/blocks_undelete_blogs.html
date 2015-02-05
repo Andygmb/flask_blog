@@ -16,7 +16,7 @@
 			<div class="date">{{blog.date}}</div>
 			<div class="title"><h1>{{blog.title}}</h1></div>
 			<div class="blog_content">{{blog.blog_content[0:1000]}}...</div>
-			<a href="{{blog.url_title}}/" class="readmore">Read more</a>
+			<a href="/{{blog.url_title}}/" class="readmore">Read more</a>
 			{% if admin %}
 				<div class="edit"><a href="/{{blog.url_title}}/blogpost/edit">edit post</a>
 				<span> | </span> 

@@ -1,4 +1,4 @@
-from blog import app, db, lm, cache
+from blog import app, db, lm
 from blog.models import User, Project, Blogpost
 from blog.forms import LoginForm, BlogpostForm, ProjectForm
 from flask import Flask, render_template, request, session, redirect, url_for, Markup
@@ -6,17 +6,13 @@ from flask.ext.login import login_user, current_user, login_required
 import markdown
 import html2text
 
-@cache.memoize(timeout=600)
-def get_blogposts_and_projects():
-	blogposts = Blogpost.query.filter_by(deleted=False).order_by(Blogpost.id.desc()).limit(5).all()
-	projects = Project.query.all()
-	return blogposts, projects
 
 @app.route('/')
 def hello_world():
 	title = "andygmb"
 	admin = False
-	blogposts, projects = get_blogposts_and_projects()
+	blogposts = Blogpost.query.filter_by(deleted=False).order_by(Blogpost.id.desc()).limit(5).all()
+	projects = Project.query.all()
 	blogposts = markdown_parse(blogposts)
 	if current_user.is_authenticated():
 		admin = True
@@ -54,8 +50,8 @@ def submit_blog(entry_type):
 			)
 		db.session.add(blogpost)
 		db.session.commit()
-		with app.app_context():
-			cache.clear()
+#		with app.app_context():
+#			cache.clear()
 		return redirect("/"+form.url_title.data)
 	if entry_type.lower() == "project":
 		form = ProjectForm()
@@ -67,8 +63,8 @@ def submit_blog(entry_type):
 			)
 		db.session.add(project)
 		db.session.commit()
-		with app.app_context():
-			cache.clear()
+#		with app.app_context():
+#			cache.clear()
 		return redirect("/projects")
 	return redirect("/")
 
@@ -79,16 +75,16 @@ def new_blogpost(entry_type):
 		title = "andygmb | create blogpost"
 		form = BlogpostForm()
 		if request.method == "POST":
-			with app.app_context():
-				cache.clear()
+##			with app.app_context():
+#				cache.clear()
 			return render_template("ajax_create_blogpost.html", form=form)
 		return render_template("blocks_create_blogpost.html", form=form, title=title)
 	if entry_type.lower() == "project":
 		title = "andygmb | create project"
 		form = ProjectForm()
 		if request.method == "POST":
-			with app.app_context():
-				cache.clear()
+#			with app.app_context():
+#				cache.clear()
 			return render_template("ajax_create_project.html", form=form)
 		return render_template("blocks_create_project.html", form=form, title=title)
 	return redirect("/")
@@ -97,8 +93,8 @@ def new_blogpost(entry_type):
 @login_required
 def edit_blogpost_commit(entry_type):
 	if entry_type.lower() == "blogpost":
-		with app.app_context():
-			cache.clear()
+#		with app.app_context():
+#			cache.clear()
 		form = BlogpostForm()
 		blogpost = Blogpost.query.filter_by(url_title=form.url_title.data).first()
 		blogpost.blog_content = form.blog_content.data
@@ -107,8 +103,8 @@ def edit_blogpost_commit(entry_type):
 		db.session.commit()
 		return redirect("/"+blogpost.url_title)
 	if entry_type.lower() == "project":
-		with app.app_context():
-			cache.clear()
+#		with app.app_context():
+#			cache.clear()
 		form = ProjectForm()
 		project = Project.query.filter_by(title=form.title.data).first()
 		project.title = form.title.data,
@@ -147,8 +143,8 @@ def edit_blogpost(value, entry_type):
 @app.route('/<value>/<entry_type>/delete')
 @login_required
 def delete_blogpost(value, entry_type):
-	with app.app_context():
-		cache.clear()
+#	with app.app_context():
+#		cache.clear()
 
 	if entry_type.lower() == "blogpost":
 		blogpost = Blogpost.query.filter_by(url_title=value).first_or_404()
@@ -168,15 +164,15 @@ def delete_blogpost(value, entry_type):
 @login_required
 def undelete_blogpost(value, entry_type):
 	if entry_type.lower() == "blogpost":
-		with app.app_context():
-			cache.clear()
+#		with app.app_context():
+#			cache.clear()
 		blogpost = Blogpost.query.filter_by(url_title=value).first_or_404()
 		blogpost.deleted = False
 		db.session.commit()
 		return redirect("/" + blogpost.url_title)
 	if entry_type.lower() == "project":
-		with app.app_context():
-			cache.clear()
+#		with app.app_context():
+#			cache.clear()
 		project = Project.query.filter_by(title=value).first_or_404()
 		project.deleted = False
 		db.session.commit()
