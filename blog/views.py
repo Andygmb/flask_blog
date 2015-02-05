@@ -24,7 +24,6 @@ def hello_world():
 	return render_template("blocks_main.html", blogposts=blogposts, projects=projects, title=title, admin=admin)
 
 @app.route('/projects')
-#@cache.memoize(timeout=600)
 def projects():
 	title = "andygmb | projects"
 	projects = Project.query.order_by(Project.id.desc()).all()
@@ -32,8 +31,6 @@ def projects():
 		return render_template("blocks_projects.html", ajax=True, projects=projects)
 	return render_template("blocks_projects.html", ajax=False, projects=projects, title=title)
 
-@app.route('/blog')
-#@cache.memoize(timeout=600)
 def blogs():
 	title = "andygmb | blog"
 	blogposts = Blogpost.query.order_by(Blogpost.id.desc()).limit(5).all()
@@ -215,7 +212,6 @@ def login():
 
 
 @app.route('/more/<b_id>')
-@cache.memoize(timeout=600)
 def get_more_from_id(b_id):
 	title = "andygmb | older posts"
 	maxlength = int(Blogpost.query.order_by(Blogpost.id.desc()).first().id)
@@ -236,7 +232,6 @@ def get_more_from_id(b_id):
 	return render_template("blocks_main.html", blogposts=blogposts, projects=projects, prev=True, title=title)
 
 @app.route('/prev/<b_id>')
-@cache.memoize(timeout=600)
 def get_prev_from_id(b_id):
 	title = "andygmb | newer posts"
 	prev = True
