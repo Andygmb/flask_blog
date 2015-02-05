@@ -27,6 +27,7 @@ def projects():
 		return render_template("blocks_projects.html", ajax=True, projects=projects)
 	return render_template("blocks_projects.html", ajax=False, projects=projects, title=title)
 
+@app.route('/blog')
 def blogs():
 	title = "andygmb | blog"
 	blogposts = Blogpost.query.order_by(Blogpost.id.desc()).limit(5).all()
