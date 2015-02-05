@@ -40,7 +40,7 @@ def blogs():
 		return render_template("blocks_blogposts.html", blogposts=blogposts, admin=True, title=title)
 	return render_template("blocks_blogposts.html", ajax=False, blogposts=blogposts, title=title)
 
-@app.route("/submit/<entry_type>/", methods=['POST'])
+@app.route("/submit/<entry_type>", methods=['POST'])
 @login_required
 def submit_blog(entry_type):
 	if entry_type.lower() == "blogpost":
@@ -71,7 +71,7 @@ def submit_blog(entry_type):
 		return redirect("/projects")
 	return redirect("/")
 
-@app.route('/create/<entry_type>/', methods=['GET','POST'])
+@app.route('/create/<entry_type>', methods=['GET','POST'])
 @login_required
 def new_blogpost(entry_type):
 	if entry_type.lower() == "blogpost":
@@ -92,7 +92,7 @@ def new_blogpost(entry_type):
 		return render_template("blocks_create_project.html", form=form, title=title)
 	return redirect("/")
 
-@app.route('/edit/<entry_type>/', methods=['POST'])
+@app.route('/edit/<entry_type>', methods=['POST'])
 @login_required
 def edit_blogpost_commit(entry_type):
 	if entry_type.lower() == "blogpost":
@@ -126,6 +126,7 @@ def edit_blogpost(value, entry_type):
 		blogpost = Blogpost.query.filter_by(url_title=value).first_or_404()
 		form = BlogpostForm()
 		h = html2text.HTML2Text()
+		h.body_width = 0
 		form.blog_content.data = h.handle(Markup(markdown.markdown(blogpost.blog_content)))
 		form.title.data = h.handle(Markup(markdown.markdown(blogpost.title)))
 		form.url_title.data = h.handle(Markup(markdown.markdown(blogpost.url_title)))
@@ -135,7 +136,6 @@ def edit_blogpost(value, entry_type):
 		title = "andygmb | edit post"
 		project = Project.query.filter_by(title=value).first_or_404()
 		form = ProjectForm()
-		h = html2text.HTML2Text()
 		form.title.data = project.title
 		form.preview.data = project.preview
 		form.url.data = project.url 
@@ -182,7 +182,7 @@ def undelete_blogpost(value, entry_type):
 		return redirect("/projects")
 	return redirect("/")
 
-@app.route('/deleted/<entry_type>/')
+@app.route('/deleted/<entry_type>')
 @login_required
 def get_deleted_projects(entry_type):
 	if entry_type.lower() == "projects":
